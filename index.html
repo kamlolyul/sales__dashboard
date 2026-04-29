@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETC부문 26년 1분기 KPI 대시보드</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8f9fb;
+    --surface: #ffffff;
+    --surface2: #f1f3f7;
+    --border: #e2e6ef;
+    --border-light: #eef0f6;
+    --accent: #c8392b;
+    --accent2: #a0291c;
+    --accent-soft: rgba(200,57,43,0.08);
+    --gold: #c9930a;
+    --gold-bg: #fff8e6;
+    --silver: #7a8599;
+    --silver-bg: #f3f4f7;
+    --bronze: #b06020;
+    --bronze-bg: #fff3ea;
+    --success: #1a8a5a;
+    --success-bg: #eaf7f1;
+    --warn: #c07800;
+    --warn-bg: #fff8e0;
+    --danger: #c0303a;
+    --danger-bg: #fef0f1;
+    --text: #1a1e2e;
+    --text-muted: #6b7592;
+    --text-dim: #aab0c4;
+    --shadow: 0 1px 4px rgba(30,40,80,0.06), 0 2px 12px rgba(30,40,80,0.04);
+    --shadow-sm: 0 1px 3px rgba(30,40,80,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+  }
+
+  .header-inner {
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .ci-logo {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .header-divider {
+    width: 1px;
+    height: 40px;
+    background: var(--border);
+  }
+
+  .header-titles {}
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .header h1 {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .header-sub {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-top: 3px;
+  }
+
+  /* MAIN CONTAINER */
+  .container {
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 28px 28px 48px;
+  }
+
+  /* TABS */
+  .tabs-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+
+  .tab {
+    padding: 10px 22px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.18s;
+    font-family: 'Noto Sans KR', sans-serif;
+    white-space: nowrap;
+  }
+
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab:hover:not(.active) { color: var(--text); }
+
+  /* MONTH PILLS */
+  .month-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+
+  .month-tab {
+    padding: 5px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    transition: all 0.18s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  .month-tab.active {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-light);
+  }
+
+  /* LEADER CARDS GRID */
+  .leader-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+
+  .leader-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 22px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .leader-card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+  }
+
+  .leader-card.rank-1-card { border-left: 4px solid var(--gold); }
+  .leader-card.rank-2-card { border-left: 4px solid var(--silver); }
+  .leader-card.rank-3-card { border-left: 4px solid var(--bronze); }
+
+  .rank-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-right: 16px;
+  }
+
+  .rank-1 { background: var(--gold-bg); color: var(--gold); border: 1.5px solid #e8b800; }
+  .rank-2 { background: var(--silver-bg); color: var(--silver); border: 1.5px solid #c0c8d8; }
+  .rank-3 { background: var(--bronze-bg); color: var(--bronze); border: 1.5px solid #d4904a; }
+  .rank-other { background: var(--surface2); color: var(--text-muted); border: 1.5px solid var(--border); }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-right: 0;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    width: 200px;
+  }
+
+  .team-type-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .type-종병 { background: #e8f0fe; color: #2d6fcf; }
+  .type-의원 { background: var(--success-bg); color: var(--success); }
+  .type-병의원 { background: #f0eafe; color: #6244cc; }
+
+  .card-names { flex: 1; min-width: 0; }
+
+  .team-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2px;
+    white-space: nowrap;
+  }
+
+  .leader-name {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  /* Score section horizontal */
+  .score-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 0;
+    margin-right: 28px;
+    flex-shrink: 0;
+    width: 130px;
+  }
+
+  .score-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 4px;
+  }
+
+  .score-label { font-size: 10px; color: var(--text-muted); font-weight: 500; margin-bottom: 1px; }
+
+  .score-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .score-bar-bg {
+    height: 3px;
+    background: var(--surface2);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent);
+    opacity: 0.7;
+  }
+
+  .kpi-breakdown {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .kpi-item {
+    background: var(--surface2);
+    border-radius: 7px;
+    padding: 8px 14px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .kpi-item-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .kpi-item-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .kpi-item-rate {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  /* TABLE SECTION */
+  .stats-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 24px;
+  }
+
+  .stats-card-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+  }
+
+  .stats-card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .stats-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead th {
+    padding: 9px 13px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  thead th:first-child { text-align: left; padding-left: 18px; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border-light);
+    transition: background 0.12s;
+  }
+
+  tbody tr:hover { background: #f7f8fc; }
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody td {
+    padding: 9px 13px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text);
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  tbody td:first-child {
+    text-align: left;
+    font-weight: 600;
+    padding-left: 18px;
+  }
+
+  .td-rate { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 600; }
+  .rate-high { color: #116640; background: #c6f0dc; padding: 2px 6px; border-radius: 4px; }
+  .rate-mid { color: #7a4d00; background: #ffe9a0; padding: 2px 6px; border-radius: 4px; }
+  .rate-low { color: #8b1a22; background: #fdd5d7; padding: 2px 6px; border-radius: 4px; }
+  .rate-na { color: var(--text-dim); font-size: 11px; }
+
+  .rank-cell { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 600; color: #3d4560; }
+  .final-rank-cell {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #a02220;
+  }
+
+  .count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 10px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+
+  /* Sheet tags in table */
+  .sheet-tag {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-right: 3px;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+  .tag-clinic { background: var(--success-bg); color: var(--success); }
+  .tag-jb { background: #e8f0fe; color: #2d6fcf; }
+
+  /* Both badge */
+  .both-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+
+  /* TAB / MONTH VISIBILITY */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .month-content { display: none; }
+  .month-content.active { display: block; }
+
+  @media (max-width: 900px) {
+    .leader-card { flex-wrap: wrap; gap: 10px; }
+    .card-top { width: 100%; }
+    .score-section { width: auto; margin-right: 0; }
+    .kpi-breakdown { flex-direction: column; width: 100%; }
+    .header h1 { font-size: 18px; }
+    .ci-logo { height: 38px; }
+    .container { padding: 16px; }
+    table { font-size: 11px; }
+    tbody td, thead th { padding: 7px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <img class="ci-logo" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAD8As8DASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAcIAQYCBAUDCf/EAFoQAAEDAwEFBQQECQYHDQkBAAEAAgMEBREGBxIhMUEIE1FhcSKBkaEUMrHBFSMzQlJicrLRFheCksLSQ5Oio8Ph8BgkJTY3U1VzdIOE0/EmNDVERVRjdZTi/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAMEAQIFBgf/xAAyEQEAAQQBAwEGBQQCAwAAAAAAAQIDBBEFEiExQQYTIlFhcRQygbHRkaHB8CNCQ+Hx/9oADAMBAAIRAxEAPwC5aIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiFAJWCVwlcGjePILjHMx4yxweP1VjZqdbfXPFCVxLvDkuvcK6loKSSrrJ4oIImlz5JHANaPNZmdd5ZiJmdQ7RPmAsE4HMKE9SbZqpl4Y2yUcT6GN3tOnBDphnpxG7wzz4+SkfROsLVqqg72kkEdQ0DvqeQ4ew+nh5qKm9RVOol0MnicvGtRdrp7T/vdsoJws5XFpHT5I52BxwApXNju5JxXzjla8nde13ovoDxRmYmPLKLAWUBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAKxxQroXq7UFnozV3KqjpoQcbzzjj4IzTTVVOqY275JWCVprtp2jBzvEZ8hG/wDurp3ParpOGjlkpq91RO1hLIhC8Fx6DJGFp7yn5rdHH5VcxEW57/R4m3jV7qKjj0/b5nMqqhu9UPYcFkf6PkXH5BR9o2266FtZdNMSzugDi0tinB3SOhY44PP5rWLxcaq7XWpuVa/fnqJC9x8OXAeQAAUl9ne9CmvFZZJXYZVM72EdA5vAj3gj+qudTci7e8ve3OPq4vi+qiiJqjvVuN7d237S9X2gd3qTTk8kbRgzNiMbh5k/VPyWi681rddWVe9M7uKFrsxUzTwHm7xd8lZ2WFjmnLWu9wVTtYUn0DVNzpN3dbHVSbrfBpcSPkVJlRXRRral7M3MTLyaqvdRFUR/vZ7O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" alt="동화약품 CI">
+      <div class="header-divider"></div>
+      <div class="header-titles">
+        <div class="header-badge">KPI DASHBOARD</div>
+        <h1>ETC부문 26년 1분기 KPI 대시보드</h1>
+        <p class="header-sub">2026년 1월 · 2월 합계점수 기준 월별 순위 &amp; 팀별 품목군 평균 달성률</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Main Tabs -->
+  <div class="tabs-wrap">
+    <button class="tab active" onclick="switchTab('leaders', this)">팀장 KPI 순위</button>
+    <button class="tab" onclick="switchTab('combined', this)">팀별 통합 통계</button>
+  </div>
+
+  <!-- ===== LEADERS TAB ===== -->
+  <div class="tab-content active" id="tab-leaders">
+    <div class="month-tabs">
+      <button class="month-tab active" onclick="switchMonth('leaders','jan', this)">1월</button>
+      <button class="month-tab" onclick="switchMonth('leaders','feb', this)">2월</button>
+    </div>
+
+    <!-- JAN LEADERS -->
+    <div class="month-content active" id="leaders-jan">
+      <div class="leader-grid">
+        <div class="leader-card rank-1-card"><div class="rank-badge rank-1">1</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">대전 병원팀</div><div class="leader-name">윤경민 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,961</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:99%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">118%</div><div class="kpi-item-rate">점수 1,777</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">118%</div><div class="kpi-item-rate">점수 1,184</div></div></div></div>
+<div class="leader-card rank-2-card"><div class="rank-badge rank-2">2</div><div class="card-top"><span class="team-type-tag type-종병">종병</span><div class="card-names"><div class="team-name">종병 영업2팀</div><div class="leader-name">구대환 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,792</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:94%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">108%</div><div class="kpi-item-rate">점수 1,627</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">116%</div><div class="kpi-item-rate">점수 1,165</div></div></div></div>
+<div class="leader-card rank-3-card"><div class="rank-badge rank-3">3</div><div class="card-top"><span class="team-type-tag type-종병">종병</span><div class="card-names"><div class="team-name">종병 영업1팀</div><div class="leader-name">이정현 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,784</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:93%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">82%</div><div class="kpi-item-rate">점수 1,239</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">154%</div><div class="kpi-item-rate">점수 1,545</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">4</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">대구 병원1팀</div><div class="leader-name">김홍현 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,655</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:89%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">97%</div><div class="kpi-item-rate">점수 1,459</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">119%</div><div class="kpi-item-rate">점수 1,196</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">5</div><div class="card-top"><span class="team-type-tag type-의원">의원</span><div class="card-names"><div class="team-name">인천 의원팀</div><div class="leader-name">이동옥 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,603</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:87%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">91%</div><div class="kpi-item-rate">점수 1,368</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">123%</div><div class="kpi-item-rate">점수 1,235</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">5</div><div class="card-top"><span class="team-type-tag type-의원">의원</span><div class="card-names"><div class="team-name">북부 의원팀</div><div class="leader-name">양정민 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,603</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:87%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">96%</div><div class="kpi-item-rate">점수 1,448</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">115%</div><div class="kpi-item-rate">점수 1,155</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">7</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">광주 병원1팀</div><div class="leader-name">송세훈 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,602</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:87%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">104%</div><div class="kpi-item-rate">점수 1,562</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">104%</div><div class="kpi-item-rate">점수 1,040</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">8</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">대구 병원2팀</div><div class="leader-name">김재환 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,594</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:87%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">91%</div><div class="kpi-item-rate">점수 1,378</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">121%</div><div class="kpi-item-rate">점수 1,216</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">9</div><div class="card-top"><span class="team-type-tag type-의원">의원</span><div class="card-names"><div class="team-name">중부 의원팀</div><div class="leader-name">서정희 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,573</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:86%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">90%</div><div class="kpi-item-rate">점수 1,359</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">121%</div><div class="kpi-item-rate">점수 1,214</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">10</div><div class="card-top"><span class="team-type-tag type-의원">의원</span><div class="card-names"><div class="team-name">동부 의원팀</div><div class="leader-name">서원호(대행) 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,541</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:85%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">90%</div><div class="kpi-item-rate">점수 1,358</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">118%</div><div class="kpi-item-rate">점수 1,183</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">11</div><div class="card-top"><span class="team-type-tag type-종병">종병</span><div class="card-names"><div class="team-name">종병 영업3팀</div><div class="leader-name">조성찬 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,518</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:84%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">84%</div><div class="kpi-item-rate">점수 1,261</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">125%</div><div class="kpi-item-rate">점수 1,257</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">12</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">광주 병원2팀</div><div class="leader-name">조요성 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,514</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:84%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">87%</div><div class="kpi-item-rate">점수 1,307</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">120%</div><div class="kpi-item-rate">점수 1,207</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">13</div><div class="card-top"><span class="team-type-tag type-의원">의원</span><div class="card-names"><div class="team-name">서부 의원팀</div><div class="leader-name">문병래 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,435</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:81%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">88%</div><div class="kpi-item-rate">점수 1,321</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">110%</div><div class="kpi-item-rate">점수 1,105</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">14</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">창원 병원팀</div><div class="leader-name">유승보 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,429</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:81%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">80%</div><div class="kpi-item-rate">점수 1,209</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">122%</div><div class="kpi-item-rate">점수 1,220</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">15</div><div class="card-top"><span class="team-type-tag type-의원">의원</span><div class="card-names"><div class="team-name">남부 의원팀</div><div class="leader-name">이양우 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,426</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:81%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">87%</div><div class="kpi-item-rate">점수 1,305</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">113%</div><div class="kpi-item-rate">점수 1,130</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">16</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">부산 병원2팀</div><div class="leader-name">이충연 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,304</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:77%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">71%</div><div class="kpi-item-rate">점수 1,078</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">122%</div><div class="kpi-item-rate">점수 1,226</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">17</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">청주 병원팀</div><div class="leader-name">황주봉 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,197</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:73%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">64%</div><div class="kpi-item-rate">점수 962</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">123%</div><div class="kpi-item-rate">점수 1,235</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">18</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">전주 병원팀</div><div class="leader-name">인현교 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,181</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:73%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">65%</div><div class="kpi-item-rate">점수 986</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">119%</div><div class="kpi-item-rate">점수 1,195</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">19</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">부산 병원1팀</div><div class="leader-name">장준원 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,173</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:73%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">66%</div><div class="kpi-item-rate">점수 998</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">117%</div><div class="kpi-item-rate">점수 1,175</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">20</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">원주 병원팀</div><div class="leader-name">이승현 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,035</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:68%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">71%</div><div class="kpi-item-rate">점수 1,065</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">97%</div><div class="kpi-item-rate">점수 970</div></div></div></div>
+      </div>
+    </div>
+
+    <!-- FEB LEADERS -->
+    <div class="month-content" id="leaders-feb">
+      <div class="leader-grid">
+        <div class="leader-card rank-1-card"><div class="rank-badge rank-1">1</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">대구 병원2팀</div><div class="leader-name">김재환 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,832</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:95%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">118%</div><div class="kpi-item-rate">점수 1,781</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">105%</div><div class="kpi-item-rate">점수 1,051</div></div></div></div>
+<div class="leader-card rank-2-card"><div class="rank-badge rank-2">2</div><div class="card-top"><span class="team-type-tag type-의원">의원</span><div class="card-names"><div class="team-name">남부 의원팀</div><div class="leader-name">이양우 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,621</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:88%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">107%</div><div class="kpi-item-rate">점수 1,611</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">101%</div><div class="kpi-item-rate">점수 1,010</div></div></div></div>
+<div class="leader-card rank-3-card"><div class="rank-badge rank-3">3</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">대구 병원1팀</div><div class="leader-name">김홍현 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,535</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:85%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">101%</div><div class="kpi-item-rate">점수 1,515</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">102%</div><div class="kpi-item-rate">점수 1,020</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">4</div><div class="card-top"><span class="team-type-tag type-의원">의원</span><div class="card-names"><div class="team-name">서부 의원팀</div><div class="leader-name">문병래 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,510</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:84%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">102%</div><div class="kpi-item-rate">점수 1,530</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">98%</div><div class="kpi-item-rate">점수 980</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">5</div><div class="card-top"><span class="team-type-tag type-종병">종병</span><div class="card-names"><div class="team-name">종병 영업2팀</div><div class="leader-name">구대환 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,480</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:83%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">98%</div><div class="kpi-item-rate">점수 1,484</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">99%</div><div class="kpi-item-rate">점수 996</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">6</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">대전 병원팀</div><div class="leader-name">윤경민 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,455</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:82%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">93%</div><div class="kpi-item-rate">점수 1,402</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">105%</div><div class="kpi-item-rate">점수 1,053</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">7</div><div class="card-top"><span class="team-type-tag type-의원">의원</span><div class="card-names"><div class="team-name">동부 의원팀</div><div class="leader-name">서원호(대행) 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,452</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:82%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">97%</div><div class="kpi-item-rate">점수 1,463</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">98%</div><div class="kpi-item-rate">점수 989</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">8</div><div class="card-top"><span class="team-type-tag type-의원">의원</span><div class="card-names"><div class="team-name">북부 의원팀</div><div class="leader-name">양정민 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,440</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:82%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">98%</div><div class="kpi-item-rate">점수 1,470</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">97%</div><div class="kpi-item-rate">점수 970</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">9</div><div class="card-top"><span class="team-type-tag type-의원">의원</span><div class="card-names"><div class="team-name">인천 의원팀</div><div class="leader-name">이동옥 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,401</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:80%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">94%</div><div class="kpi-item-rate">점수 1,412</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">99%</div><div class="kpi-item-rate">점수 989</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">10</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">광주 병원1팀</div><div class="leader-name">송세훈 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,344</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:79%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">98%</div><div class="kpi-item-rate">점수 1,480</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">86%</div><div class="kpi-item-rate">점수 864</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">11</div><div class="card-top"><span class="team-type-tag type-종병">종병</span><div class="card-names"><div class="team-name">종병 영업1팀</div><div class="leader-name">이정현 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,332</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:78%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">79%</div><div class="kpi-item-rate">점수 1,186</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">114%</div><div class="kpi-item-rate">점수 1,146</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">12</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">창원 병원팀</div><div class="leader-name">유승보 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,287</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:77%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">78%</div><div class="kpi-item-rate">점수 1,170</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">111%</div><div class="kpi-item-rate">점수 1,117</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">12</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">전주 병원팀</div><div class="leader-name">인현교 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,287</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:77%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">81%</div><div class="kpi-item-rate">점수 1,224</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">106%</div><div class="kpi-item-rate">점수 1,063</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">14</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">광주 병원2팀</div><div class="leader-name">조요성 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,280</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:76%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">86%</div><div class="kpi-item-rate">점수 1,290</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">99%</div><div class="kpi-item-rate">점수 990</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">15</div><div class="card-top"><span class="team-type-tag type-종병">종병</span><div class="card-names"><div class="team-name">종병 영업3팀</div><div class="leader-name">조성찬 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,263</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:76%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">80%</div><div class="kpi-item-rate">점수 1,203</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">106%</div><div class="kpi-item-rate">점수 1,060</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">16</div><div class="card-top"><span class="team-type-tag type-의원">의원</span><div class="card-names"><div class="team-name">중부 의원팀</div><div class="leader-name">서정희 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,171</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:73%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">78%</div><div class="kpi-item-rate">점수 1,173</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">99%</div><div class="kpi-item-rate">점수 998</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">17</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">부산 병원2팀</div><div class="leader-name">이충연 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,124</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:71%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">72%</div><div class="kpi-item-rate">점수 1,086</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">103%</div><div class="kpi-item-rate">점수 1,038</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">18</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">부산 병원1팀</div><div class="leader-name">장준원 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">2,029</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:68%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">73%</div><div class="kpi-item-rate">점수 1,104</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">92%</div><div class="kpi-item-rate">점수 925</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">19</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">원주 병원팀</div><div class="leader-name">이승현 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">1,879</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:63%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">66%</div><div class="kpi-item-rate">점수 991</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">88%</div><div class="kpi-item-rate">점수 888</div></div></div></div>
+<div class="leader-card"><div class="rank-badge rank-other">20</div><div class="card-top"><span class="team-type-tag type-병의원">병의원</span><div class="card-names"><div class="team-name">청주 병원팀</div><div class="leader-name">황주봉 팀장</div></div></div><div class="score-section"><div class="score-row"><span class="score-label">합계점수</span><span class="score-value">1,868</span></div><div class="score-bar-bg"><div class="score-bar-fill" style="width:63%"></div></div></div><div class="kpi-breakdown"><div class="kpi-item"><div class="kpi-item-label">TKD 달성률</div><div class="kpi-item-value">59%</div><div class="kpi-item-rate">점수 885</div></div><div class="kpi-item"><div class="kpi-item-label">TKD 외 달성률</div><div class="kpi-item-value">98%</div><div class="kpi-item-rate">점수 983</div></div></div></div>
+      </div>
+    </div>
+  </div><!-- end tab-leaders -->
+
+  <!-- ===== COMBINED STATS TAB ===== -->
+  <div class="tab-content" id="tab-combined">
+    <div class="month-tabs">
+      <button class="month-tab active" onclick="switchMonth('combined','jan', this)">1월</button>
+      <button class="month-tab" onclick="switchMonth('combined','feb', this)">2월</button>
+    </div>
+
+    <div class="month-content active" id="combined-jan">
+      <div class="stats-card">
+        <div class="stats-card-header">
+          <div class="stats-dot"></div>
+          <span class="stats-card-title">팀별 통합 KPI 통계 — 2026년 1월 &nbsp;<span style="font-size:11px;color:var(--text-muted);font-weight:400;"><span class="sheet-tag tag-clinic">의원</span> = 의원 기능 &nbsp;<span class="sheet-tag tag-jb">종병</span> = 종병 기능</span></span>
+        </div>
+        <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="2" style="border-right:1px solid var(--border);">팀명</th>
+              <th rowspan="2">인원</th>
+              <th colspan="5" style="border-bottom:1px solid var(--border-light);color:var(--success);border-right:1px solid var(--border);">의원 기능 (TKD·디엠류·에크락겔·일반품목)</th>
+              <th colspan="4" style="border-bottom:1px solid var(--border-light);color:#2d6fcf;">종병 기능 (TKD·TKD외)</th>
+            </tr>
+            <tr>
+              <th>TKD 달성률</th>
+              <th>디엠류 달성률</th>
+              <th>에크락겔 달성률</th>
+              <th>일반품목 달성률</th>
+              <th style="border-right:1px solid var(--border);">평균 최종순위</th>
+              <th>TKD 달성률</th>
+              <th>TKD외 달성률</th>
+              <th>TKD외 순위</th>
+              <th>평균 최종순위</th>
+            </tr>
+          </thead>
+          <tbody>
+<tr>
+      <td><strong>광주 병원1팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 1명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">4</span></td>
+      <td><span class="td-rate rate-low">62.3%</span></td><td><span class="td-rate rate-mid">83.0%</span></td><td><span class="td-rate rate-low">28.3%</span></td><td><span class="td-rate rate-high">108.7%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">58.7</span></td>
+      <td><span class="td-rate rate-high">108.0%</span></td><td><span class="td-rate rate-high">125.0%</span></td><td><span class="rank-cell">19.0</span></td><td><span class="final-rank-cell">21.0</span></td>
+    </tr><tr>
+      <td><strong>광주 병원2팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 1명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">4</span></td>
+      <td><span class="td-rate rate-mid">80.3%</span></td><td><span class="td-rate rate-high">101.0%</span></td><td><span class="td-rate rate-low">15.7%</span></td><td><span class="td-rate rate-high">126.3%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">26.0</span></td>
+      <td><span class="td-rate rate-mid">86.0%</span></td><td><span class="td-rate rate-high">120.0%</span></td><td><span class="rank-cell">22.0</span></td><td><span class="final-rank-cell">30.0</span></td>
+    </tr><tr>
+      <td><strong>남부 의원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 6명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-mid">91.2%</span></td><td><span class="td-rate rate-mid">80.0%</span></td><td><span class="td-rate rate-low">37.7%</span></td><td><span class="td-rate rate-high">122.5%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">33.8</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+    </tr><tr>
+      <td><strong>대구 병원1팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 3명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-mid">88.3%</span></td><td><span class="td-rate rate-mid">90.0%</span></td><td><span class="td-rate rate-low">33.7%</span></td><td><span class="td-rate rate-high">120.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">38.0</span></td>
+      <td><span class="td-rate rate-mid">89.0%</span></td><td><span class="td-rate rate-high">125.7%</span></td><td><span class="rank-cell">20.3</span></td><td><span class="final-rank-cell">22.3</span></td>
+    </tr><tr>
+      <td><strong>대구 병원2팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 2명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">4</span></td>
+      <td><span class="td-rate rate-mid">76.0%</span></td><td><span class="td-rate rate-low">65.5%</span></td><td><span class="td-rate rate-mid">73.0%</span></td><td><span class="td-rate rate-high">123.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">34.5</span></td>
+      <td><span class="td-rate rate-mid">94.0%</span></td><td><span class="td-rate rate-high">126.5%</span></td><td><span class="rank-cell">13.5</span></td><td><span class="final-rank-cell">21.5</span></td>
+    </tr><tr>
+      <td><strong>대전 병원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 5명</span><span class="sheet-tag tag-jb">종병 1명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-low">49.2%</span></td><td><span class="td-rate rate-mid">99.8%</span></td><td><span class="td-rate rate-low">22.0%</span></td><td><span class="td-rate rate-high">120.8%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">36.6</span></td>
+      <td><span class="td-rate rate-high">168.0%</span></td><td><span class="td-rate rate-high">150.0%</span></td><td><span class="rank-cell">1.0</span></td><td><span class="final-rank-cell">6.0</span></td>
+    </tr><tr>
+      <td><strong>동부 의원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 5명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">5</span></td>
+      <td><span class="td-rate rate-mid">82.2%</span></td><td><span class="td-rate rate-low">69.2%</span></td><td><span class="td-rate rate-low">20.6%</span></td><td><span class="td-rate rate-high">130.8%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">18.4</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+    </tr><tr>
+      <td><strong>병의원영업A</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 1명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">3</span></td>
+      <td><span class="td-rate rate-high">144.0%</span></td><td><span class="td-rate rate-mid">74.0%</span></td><td><span class="td-rate rate-low">0.0%</span></td><td><span class="td-rate rate-high">120.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">38.0</span></td>
+      <td><span class="td-rate rate-low">50.5%</span></td><td><span class="td-rate rate-high">128.5%</span></td><td><span class="rank-cell">34.0</span></td><td><span class="final-rank-cell">19.5</span></td>
+    </tr><tr>
+      <td><strong>병의원영업B</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 2명</span><span class="sheet-tag tag-jb">종병 1명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">3</span></td>
+      <td><span class="td-rate rate-mid">85.5%</span></td><td><span class="td-rate rate-mid">88.0%</span></td><td><span class="td-rate rate-low">18.0%</span></td><td><span class="td-rate rate-high">124.5%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">28.0</span></td>
+      <td><span class="td-rate rate-low">41.0%</span></td><td><span class="td-rate rate-high">146.0%</span></td><td><span class="rank-cell">39.0</span></td><td><span class="final-rank-cell">7.0</span></td>
+    </tr><tr>
+      <td><strong>부산 병원1팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">5</span></td>
+      <td><span class="td-rate rate-low">54.7%</span></td><td><span class="td-rate rate-mid">91.7%</span></td><td><span class="td-rate rate-low">27.0%</span></td><td><span class="td-rate rate-high">115.7%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">44.3</span></td>
+      <td><span class="td-rate rate-low">65.5%</span></td><td><span class="td-rate rate-high">130.5%</span></td><td><span class="rank-cell">30.0</span></td><td><span class="final-rank-cell">20.0</span></td>
+    </tr><tr>
+      <td><strong>부산 병원2팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">5</span></td>
+      <td><span class="td-rate rate-mid">76.7%</span></td><td><span class="td-rate rate-low">69.7%</span></td><td><span class="td-rate rate-low">40.3%</span></td><td><span class="td-rate rate-high">123.3%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">33.0</span></td>
+      <td><span class="td-rate rate-low">66.0%</span></td><td><span class="td-rate rate-high">132.0%</span></td><td><span class="rank-cell">25.0</span></td><td><span class="final-rank-cell">15.5</span></td>
+    </tr><tr>
+      <td><strong>북부 의원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 6명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-mid">94.5%</span></td><td><span class="td-rate rate-mid">87.0%</span></td><td><span class="td-rate rate-low">17.0%</span></td><td><span class="td-rate rate-high">126.2%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">25.8</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+    </tr><tr>
+      <td><strong>서부 의원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 6명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-mid">85.3%</span></td><td><span class="td-rate rate-mid">90.8%</span></td><td><span class="td-rate rate-low">38.5%</span></td><td><span class="td-rate rate-high">123.3%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">32.3</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+    </tr><tr>
+      <td><strong>원주 병원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 1명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">4</span></td>
+      <td><span class="td-rate rate-mid">70.7%</span></td><td><span class="td-rate rate-mid">95.3%</span></td><td><span class="td-rate rate-low">41.3%</span></td><td><span class="td-rate rate-mid">99.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">63.3</span></td>
+      <td><span class="td-rate rate-low">67.0%</span></td><td><span class="td-rate rate-mid">96.0%</span></td><td><span class="rank-cell">29.0</span></td><td><span class="final-rank-cell">38.0</span></td>
+    </tr><tr>
+      <td><strong>인천 의원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 4명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">4</span></td>
+      <td><span class="td-rate rate-mid">74.2%</span></td><td><span class="td-rate rate-high">103.8%</span></td><td><span class="td-rate rate-mid">84.5%</span></td><td><span class="td-rate rate-high">126.2%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">27.2</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+    </tr><tr>
+      <td><strong>전주 병원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">5</span></td>
+      <td><span class="td-rate rate-mid">78.7%</span></td><td><span class="td-rate rate-mid">75.0%</span></td><td><span class="td-rate rate-mid">72.3%</span></td><td><span class="td-rate rate-high">125.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">27.3</span></td>
+      <td><span class="td-rate rate-low">59.5%</span></td><td><span class="td-rate rate-high">120.5%</span></td><td><span class="rank-cell">31.5</span></td><td><span class="final-rank-cell">24.0</span></td>
+    </tr><tr>
+      <td><strong>종병 영업1팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-jb">종병 6명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="rate-na">—</span></td>
+      <td><span class="td-rate rate-mid">79.8%</span></td><td><span class="td-rate rate-high">134.0%</span></td><td><span class="rank-cell">18.8</span></td><td><span class="final-rank-cell">18.0</span></td>
+    </tr><tr>
+      <td><strong>종병 영업2팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-jb">종병 6명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="rate-na">—</span></td>
+      <td><span class="td-rate rate-high">101.5%</span></td><td><span class="td-rate rate-high">114.7%</span></td><td><span class="rank-cell">12.7</span></td><td><span class="final-rank-cell">28.8</span></td>
+    </tr><tr>
+      <td><strong>종병 영업3팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-jb">종병 7명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">7</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="rate-na">—</span></td>
+      <td><span class="td-rate rate-mid">82.0%</span></td><td><span class="td-rate rate-high">129.1%</span></td><td><span class="rank-cell">18.7</span></td><td><span class="final-rank-cell">20.0</span></td>
+    </tr><tr>
+      <td><strong>중부 의원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 6명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-mid">72.8%</span></td><td><span class="td-rate rate-mid">96.3%</span></td><td><span class="td-rate rate-low">33.2%</span></td><td><span class="td-rate rate-high">126.2%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">27.0</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+    </tr><tr>
+      <td><strong>창원 병원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 4명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-low">61.8%</span></td><td><span class="td-rate rate-mid">85.8%</span></td><td><span class="td-rate rate-low">48.0%</span></td><td><span class="td-rate rate-high">120.2%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">37.0</span></td>
+      <td><span class="td-rate rate-mid">88.5%</span></td><td><span class="td-rate rate-high">142.5%</span></td><td><span class="rank-cell">14.5</span></td><td><span class="final-rank-cell">11.5</span></td>
+    </tr><tr>
+      <td><strong>청주 병원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 4명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-low">54.0%</span></td><td><span class="td-rate rate-high">100.0%</span></td><td><span class="td-rate rate-low">32.8%</span></td><td><span class="td-rate rate-high">120.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">37.0</span></td>
+      <td><span class="td-rate rate-low">61.5%</span></td><td><span class="td-rate rate-high">148.0%</span></td><td><span class="rank-cell">26.0</span></td><td><span class="final-rank-cell">6.0</span></td>
+    </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div><!-- combined-jan -->
+
+    <div class="month-content" id="combined-feb">
+      <div class="stats-card">
+        <div class="stats-card-header">
+          <div class="stats-dot"></div>
+          <span class="stats-card-title">팀별 통합 KPI 통계 — 2026년 2월 &nbsp;<span style="font-size:11px;color:var(--text-muted);font-weight:400;"><span class="sheet-tag tag-clinic">의원</span> = 의원 기능 &nbsp;<span class="sheet-tag tag-jb">종병</span> = 종병 기능</span></span>
+        </div>
+        <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="2" style="border-right:1px solid var(--border);">팀명</th>
+              <th rowspan="2">인원</th>
+              <th colspan="5" style="border-bottom:1px solid var(--border-light);color:var(--success);border-right:1px solid var(--border);">의원 기능 (TKD·디엠류·에크락겔·일반품목)</th>
+              <th colspan="4" style="border-bottom:1px solid var(--border-light);color:#2d6fcf;">종병 기능 (TKD·TKD외)</th>
+            </tr>
+            <tr>
+              <th>TKD 달성률</th>
+              <th>디엠류 달성률</th>
+              <th>에크락겔 달성률</th>
+              <th>일반품목 달성률</th>
+              <th style="border-right:1px solid var(--border);">평균 최종순위</th>
+              <th>TKD 달성률</th>
+              <th>TKD외 달성률</th>
+              <th>TKD외 순위</th>
+              <th>평균 최종순위</th>
+            </tr>
+          </thead>
+          <tbody>
+<tr>
+      <td><strong>광주 병원1팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 1명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">4</span></td>
+      <td><span class="td-rate rate-low">66.0%</span></td><td><span class="td-rate rate-mid">80.7%</span></td><td><span class="td-rate rate-low">13.3%</span></td><td><span class="td-rate rate-mid">88.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">55.0</span></td>
+      <td><span class="td-rate rate-high">101.0%</span></td><td><span class="td-rate rate-high">121.0%</span></td><td><span class="rank-cell">38.0</span></td><td><span class="final-rank-cell">7.0</span></td>
+    </tr><tr>
+      <td><strong>광주 병원2팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 1명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">4</span></td>
+      <td><span class="td-rate rate-mid">89.7%</span></td><td><span class="td-rate rate-high">101.0%</span></td><td><span class="td-rate rate-low">47.3%</span></td><td><span class="td-rate rate-mid">96.7%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">50.3</span></td>
+      <td><span class="td-rate rate-mid">76.0%</span></td><td><span class="td-rate rate-mid">99.0%</span></td><td><span class="rank-cell">29.0</span></td><td><span class="final-rank-cell">24.0</span></td>
+    </tr><tr>
+      <td><strong>남부 의원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 6명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-high">122.2%</span></td><td><span class="td-rate rate-mid">79.3%</span></td><td><span class="td-rate rate-low">14.3%</span></td><td><span class="td-rate rate-high">109.2%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">25.0</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+    </tr><tr>
+      <td><strong>대구 병원1팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 3명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-mid">99.0%</span></td><td><span class="td-rate rate-mid">85.7%</span></td><td><span class="td-rate rate-low">17.3%</span></td><td><span class="td-rate rate-high">100.7%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">40.0</span></td>
+      <td><span class="td-rate rate-mid">96.0%</span></td><td><span class="td-rate rate-high">110.7%</span></td><td><span class="rank-cell">12.7</span></td><td><span class="final-rank-cell">14.7</span></td>
+    </tr><tr>
+      <td><strong>대구 병원2팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 2명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">4</span></td>
+      <td><span class="td-rate rate-mid">80.5%</span></td><td><span class="td-rate rate-low">64.5%</span></td><td><span class="td-rate rate-low">16.0%</span></td><td><span class="td-rate rate-mid">94.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">48.5</span></td>
+      <td><span class="td-rate rate-high">126.5%</span></td><td><span class="td-rate rate-high">117.0%</span></td><td><span class="rank-cell">4.5</span></td><td><span class="final-rank-cell">12.0</span></td>
+    </tr><tr>
+      <td><strong>대전 병원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 5명</span><span class="sheet-tag tag-jb">종병 1명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-low">64.0%</span></td><td><span class="td-rate rate-high">102.4%</span></td><td><span class="td-rate rate-low">34.2%</span></td><td><span class="td-rate rate-high">106.6%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">27.8</span></td>
+      <td><span class="td-rate rate-high">115.0%</span></td><td><span class="td-rate rate-high">120.0%</span></td><td><span class="rank-cell">4.0</span></td><td><span class="final-rank-cell">8.0</span></td>
+    </tr><tr>
+      <td><strong>동부 의원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 5명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">5</span></td>
+      <td><span class="td-rate rate-mid">89.2%</span></td><td><span class="td-rate rate-mid">72.2%</span></td><td><span class="td-rate rate-low">7.2%</span></td><td><span class="td-rate rate-high">107.6%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">28.2</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+    </tr><tr>
+      <td><strong>병의원영업A</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 1명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">3</span></td>
+      <td><span class="td-rate rate-high">156.0%</span></td><td><span class="td-rate rate-mid">70.0%</span></td><td><span class="td-rate rate-low">5.0%</span></td><td><span class="td-rate rate-mid">86.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">64.0</span></td>
+      <td><span class="td-rate rate-low">67.0%</span></td><td><span class="td-rate rate-high">107.5%</span></td><td><span class="rank-cell">23.0</span></td><td><span class="final-rank-cell">18.0</span></td>
+    </tr><tr>
+      <td><strong>병의원영업B</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 2명</span><span class="sheet-tag tag-jb">종병 1명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">3</span></td>
+      <td><span class="td-rate rate-high">121.5%</span></td><td><span class="td-rate rate-mid">96.5%</span></td><td><span class="td-rate rate-low">18.0%</span></td><td><span class="td-rate rate-high">102.5%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">37.0</span></td>
+      <td><span class="td-rate rate-low">21.0%</span></td><td><span class="td-rate rate-high">111.0%</span></td><td><span class="rank-cell">40.0</span></td><td><span class="final-rank-cell">17.0</span></td>
+    </tr><tr>
+      <td><strong>부산 병원1팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">5</span></td>
+      <td><span class="td-rate rate-mid">98.7%</span></td><td><span class="td-rate rate-mid">81.3%</span></td><td><span class="td-rate rate-low">33.0%</span></td><td><span class="td-rate rate-mid">90.3%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">57.3</span></td>
+      <td><span class="td-rate rate-low">58.0%</span></td><td><span class="td-rate rate-mid">98.0%</span></td><td><span class="rank-cell">32.5</span></td><td><span class="final-rank-cell">24.0</span></td>
+    </tr><tr>
+      <td><strong>부산 병원2팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">5</span></td>
+      <td><span class="td-rate rate-mid">87.0%</span></td><td><span class="td-rate rate-mid">80.7%</span></td><td><span class="td-rate rate-low">31.7%</span></td><td><span class="td-rate rate-high">108.7%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">24.3</span></td>
+      <td><span class="td-rate rate-low">62.0%</span></td><td><span class="td-rate rate-high">108.0%</span></td><td><span class="rank-cell">27.0</span></td><td><span class="final-rank-cell">16.5</span></td>
+    </tr><tr>
+      <td><strong>북부 의원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 6명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-mid">97.5%</span></td><td><span class="td-rate rate-mid">87.0%</span></td><td><span class="td-rate rate-low">30.5%</span></td><td><span class="td-rate rate-high">103.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">36.2</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+    </tr><tr>
+      <td><strong>서부 의원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 6명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-high">103.2%</span></td><td><span class="td-rate rate-high">102.2%</span></td><td><span class="td-rate rate-low">24.3%</span></td><td><span class="td-rate rate-high">107.2%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">28.7</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+    </tr><tr>
+      <td><strong>원주 병원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 1명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">4</span></td>
+      <td><span class="td-rate rate-low">60.7%</span></td><td><span class="td-rate rate-mid">89.0%</span></td><td><span class="td-rate rate-low">25.3%</span></td><td><span class="td-rate rate-mid">86.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">64.3</span></td>
+      <td><span class="td-rate rate-low">65.0%</span></td><td><span class="td-rate rate-high">106.0%</span></td><td><span class="rank-cell">28.0</span></td><td><span class="final-rank-cell">21.0</span></td>
+    </tr><tr>
+      <td><strong>인천 의원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 4명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">4</span></td>
+      <td><span class="td-rate rate-mid">80.5%</span></td><td><span class="td-rate rate-high">109.5%</span></td><td><span class="td-rate rate-low">11.8%</span></td><td><span class="td-rate rate-mid">97.8%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">44.8</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+    </tr><tr>
+      <td><strong>전주 병원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 3명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">5</span></td>
+      <td><span class="td-rate rate-mid">78.0%</span></td><td><span class="td-rate rate-low">68.3%</span></td><td><span class="td-rate rate-low">44.3%</span></td><td><span class="td-rate rate-high">120.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">15.0</span></td>
+      <td><span class="td-rate rate-mid">81.0%</span></td><td><span class="td-rate rate-mid">96.0%</span></td><td><span class="rank-cell">18.0</span></td><td><span class="final-rank-cell">26.0</span></td>
+    </tr><tr>
+      <td><strong>종병 영업1팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-jb">종병 6명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="rate-na">—</span></td>
+      <td><span class="td-rate rate-mid">75.8%</span></td><td><span class="td-rate rate-mid">99.0%</span></td><td><span class="rank-cell">21.2</span></td><td><span class="final-rank-cell">24.3</span></td>
+    </tr><tr>
+      <td><strong>종병 영업2팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-jb">종병 6명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="rate-na">—</span></td>
+      <td><span class="td-rate rate-mid">92.5%</span></td><td><span class="td-rate rate-mid">98.7%</span></td><td><span class="rank-cell">14.7</span></td><td><span class="final-rank-cell">24.7</span></td>
+    </tr><tr>
+      <td><strong>종병 영업3팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-jb">종병 7명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">7</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="rate-na">—</span></td>
+      <td><span class="td-rate rate-mid">77.9%</span></td><td><span class="td-rate rate-high">107.0%</span></td><td><span class="rank-cell">20.9</span></td><td><span class="final-rank-cell">19.0</span></td>
+    </tr><tr>
+      <td><strong>중부 의원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 6명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-low">64.0%</span></td><td><span class="td-rate rate-mid">99.2%</span></td><td><span class="td-rate rate-low">23.5%</span></td><td><span class="td-rate rate-high">102.2%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">38.8</span></td>
+      <td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td><td><span class="rate-na">—</span></td>
+    </tr><tr>
+      <td><strong>창원 병원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 4명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-mid">74.2%</span></td><td><span class="td-rate rate-mid">88.5%</span></td><td><span class="td-rate rate-low">32.5%</span></td><td><span class="td-rate rate-high">114.0%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">19.5</span></td>
+      <td><span class="td-rate rate-mid">80.0%</span></td><td><span class="td-rate rate-high">123.0%</span></td><td><span class="rank-cell">19.5</span></td><td><span class="final-rank-cell">6.5</span></td>
+    </tr><tr>
+      <td><strong>청주 병원팀</strong><br><small style="font-weight:400;"><span class="sheet-tag tag-clinic">의원 4명</span><span class="sheet-tag tag-jb">종병 2명</span></small></td>
+      <td style="text-align:center;"><span class="count-badge">6</span></td>
+      <td><span class="td-rate rate-low">43.0%</span></td><td><span class="td-rate rate-high">106.5%</span></td><td><span class="td-rate rate-low">15.0%</span></td><td><span class="td-rate rate-mid">99.8%</span></td>
+      <td style="border-right:1px solid var(--border);"><span class="final-rank-cell">39.0</span></td>
+      <td><span class="td-rate rate-low">57.0%</span></td><td><span class="td-rate rate-high">101.0%</span></td><td><span class="rank-cell">26.0</span></td><td><span class="final-rank-cell">24.5</span></td>
+    </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div><!-- combined-feb -->
+  </div><!-- end tab-combined -->
+
+</div><!-- end container -->
+
+<script>
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  btn.classList.add('active');
+}
+
+function switchMonth(tabId, month, btn) {
+  const parent = document.getElementById('tab-' + tabId);
+  parent.querySelectorAll('.month-content').forEach(el => el.classList.remove('active'));
+  parent.querySelectorAll('.month-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId + '-' + month).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
